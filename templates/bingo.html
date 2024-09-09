@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bingo Card</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .bingo-card-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 600px; /* Maximum width for the card */
+            box-sizing: border-box;
+            padding: 0 20px; /* Padding for responsiveness */
+        }
+        .bingo-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+        .bingo-cell {
+            border: 2px solid #333;
+            padding: 15px;
+            font-size: 2vw; /* Responsive font size */
+            text-align: center;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            box-sizing: border-box;
+        }
+        .bingo-cell.center {
+            background-color: #e0e0e0;
+            font-size: 2.5vw; /* Larger font size for center */
+            font-weight: bold;
+            color: #333;
+        }
+        .bingo-cell.clicked {
+            background-color: lightgreen;
+        }
+        .bingo-person {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .bingo-text {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .new-game-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .new-game-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="bingo-card-container">
+        <h1>Your Bingo Card</h1>
+        <div class="bingo-grid">
+            {% for index in range(25) %}
+                <div class="bingo-cell {% if index == 12 %}center{% endif %}"
+                     data-index="{{ index }}"
+                     onclick="toggleCell(this)">
+                    {% set phrase = bingo_phrases[index] %}
+                    {% if phrase %}
+                        {% set person = phrase.split('|')[0] %}
+                        {% set text = phrase.split('|')[1] %}
+                        {% if person == 'Center' %}
+                            BINGO
+                        {% else %}
+                            <span class="bingo-person">{{ person }}</span>
+                            <span class="bingo-text">{{ text }}</span>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+        <a href="/" class="new-game-button">New Game</a>
+    </div>
+
+    <script>
+        function toggleCell(cell) {
+            if (!cell.classList.contains('center')) {
+                cell.classList.toggle('clicked');
+            }
+        }
+    </script>
+</body>
+</html>
